@@ -34,9 +34,12 @@ export function Portfolio({ url, shouldFocus }: { url: URL; shouldFocus: boolean
 
       <main className="site-shell">
         <section aria-labelledby="accueil" className="pt-14 pb-15 sm:pt-18 sm:pb-16">
-          <h1 id="accueil" tabIndex={-1} className="w-fit max-w-full text-[clamp(3rem,8vw,5.5rem)] leading-[1.02] font-bold tracking-[-0.06em] wrap-anywhere">
-            {displayName}
-          </h1>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <img src={profile.avatarUrl} alt="" width="80" height="80" className="size-15 shrink-0 rounded-full object-cover ring-1 ring-line sm:size-20" />
+            <h1 id="accueil" tabIndex={-1} className="w-fit max-w-full text-[clamp(3rem,8vw,5.5rem)] leading-[1.02] font-bold tracking-[-0.06em] wrap-anywhere">
+              {displayName}
+            </h1>
+          </div>
           <p className="mt-5 max-w-2xl text-xl leading-snug font-semibold tracking-[-0.025em] text-balance sm:text-[1.65rem]">{profile.tagline}</p>
           <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">{profile.bio}</p>
           <a
@@ -51,16 +54,21 @@ export function Portfolio({ url, shouldFocus }: { url: URL; shouldFocus: boolean
         <section aria-labelledby="projets">
           <h2 id="projets" tabIndex={-1} className="w-fit scroll-mt-6 text-[2rem] leading-tight font-bold tracking-[-0.045em] sm:text-4xl">Projets</h2>
           <ol className="mt-5 grid list-none gap-4 lg:grid-cols-3" role="list">
-            {projects.map((project, index) => (
+            {projects.map((project) => (
               <li key={project.id} className="min-w-0">
                 <article className="flex h-full flex-col rounded-xl border border-line bg-white p-5 sm:p-6 lg:min-h-48">
                   <div className="flex items-center gap-3.5">
-                    <span aria-hidden="true" className="font-mono text-sm font-medium text-muted tabular-nums">{String(index + 1).padStart(2, '0')}</span>
+                    <img src={project.iconUrl} alt="" width="48" height="48" className="size-12 shrink-0 rounded-xl border border-line object-cover" />
                     <span className="rounded-md bg-lilac px-2 py-1 text-xs leading-tight font-semibold text-accent">{project.category}</span>
                   </div>
                   <h3 className="mt-3.5 text-xl leading-tight font-bold tracking-[-0.035em] wrap-anywhere sm:text-[1.35rem]">{project.name}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
                   {project.contribution && <p className="mt-2 text-sm leading-relaxed text-muted">{project.contribution}</p>}
+                  <ul aria-label={`Technologies – ${project.name}`} className="mt-4 mb-2 flex flex-wrap gap-1.5" role="list">
+                    {project.stack.map((technology) => (
+                      <li key={technology} className="rounded-md bg-paper px-2 py-1 text-xs font-medium text-muted">{technology}</li>
+                    ))}
+                  </ul>
                   {(project.links.length > 0 || project.id === 'discord-ui') && (
                     <div className="mt-auto flex flex-wrap items-center gap-x-4 pt-2 text-sm">
                       {project.id === 'discord-ui' && (

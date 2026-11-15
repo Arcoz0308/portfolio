@@ -20,23 +20,12 @@
   padding: 1rem 1.25rem;
 }
 
-.portfolio-discord .dui-embed {
-  padding: 0.875rem 1rem;
-  font-size: 0.875rem;
+.portfolio-discord .dui-container {
+  width: min(100%, 34rem);
 }
 
-.portfolio-discord .dui-embed-title {
-  margin-bottom: 0.25rem;
-  overflow-wrap: anywhere;
-}
-
-.portfolio-discord .dui-embed a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.portfolio-discord .dui-embed a:focus-visible {
-  outline-offset: 1px;
+.portfolio-discord .dui-container .dui-component-button {
+  flex: 0 1 auto;
 }
 
 @media (min-width: 48rem) {

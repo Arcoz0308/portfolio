@@ -10,21 +10,21 @@ import './discord.css'
 
 const accent = '#a78bfa'
 const author: MessageAuthor = {
-  id: 'portfolio',
+  id: 'arcoz',
   displayName,
+  avatarUrl: profile.avatarUrl,
   avatarFallback: { background: '#c4b5fd', color: '#201b2c' },
 }
 const demoTimestamp = '2026-11-15T09:00:00Z'
 const discordTokens = {
   background: '#262631',
-  surface: '#32313e',
   text: '#f4f2fa',
   strong: '#f4f2fa',
   muted: '#c3becf',
   accent,
   link: '#c4b5fd',
-  embedAccent: accent,
-  embedBorder: '#494656',
+  containerSurface: '#32313e',
+  containerOutline: '#494656',
   linkButtonBackground: '#3d3454',
   linkButtonText: '#f4f2fa',
 }
@@ -68,16 +68,35 @@ const channels: Record<ChannelId, ChannelViewModel> = {
     name: 'projets',
     messages: projects.map((project): MessageView => ({
       id: project.id,
-      author,
+      author: { id: project.id, displayName: project.name, avatarUrl: project.iconUrl },
       timestamp: demoTimestamp,
-      body: { kind: 'text', content: '' },
-      embeds: [{
-        id: `embed-${project.id}`,
-        title: project.name,
-        description: [project.description, project.contribution, project.links.map(markdownLink).join(' · ')]
-          .filter(Boolean)
-          .join('\n\n'),
-      }],
+      body: {
+        kind: 'components-v2',
+        components: [{
+          id: `projet-${project.id}`,
+          kind: 'container',
+          accentColor: accent,
+          components: [
+            {
+              id: 'description',
+              kind: 'text-display',
+              content: [project.description, project.contribution].filter(Boolean).join('\n\n'),
+            },
+            { id: 'stack', kind: 'text-display', content: `-# ${project.stack.join(' · ')}` },
+            {
+              id: 'liens',
+              kind: 'action-row',
+              buttons: project.links.map(({ label, href }) => ({
+                id: href,
+                kind: 'link-button',
+                label,
+                ariaLabel: `${label} – ${project.name}`,
+                url: href,
+              })),
+            },
+          ],
+        }],
+      },
     })),
   },
   contact: {
