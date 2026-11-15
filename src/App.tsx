@@ -53,7 +53,7 @@ export function App() {
             <a className="font-medium text-discord-accent hover:underline" href="/" data-route>Retour au portfolio</a>
           </main>
         )}>
-          <DiscordPortfolio channelId={channel} />
+          <DiscordPortfolio channelId={channel} shouldFocus={location.changed} />
         </Suspense>
       ) : (
         <Portfolio url={location.url} shouldFocus={location.changed} />

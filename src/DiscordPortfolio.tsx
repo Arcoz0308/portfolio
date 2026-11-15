@@ -155,13 +155,13 @@ function ChannelNavigation({ channelId }: { channelId: ChannelId }) {
   )
 }
 
-export default function DiscordPortfolio({ channelId }: { channelId: ChannelId }) {
+export default function DiscordPortfolio({ channelId, shouldFocus }: { channelId: ChannelId; shouldFocus: boolean }) {
   const heading = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
-    heading.current?.focus({ preventScroll: true })
-  }, [channelId])
+    if (shouldFocus) heading.current?.focus({ preventScroll: true })
+  }, [channelId, shouldFocus])
 
   return (
     <div className="portfolio-discord flex h-dvh min-h-[26rem] flex-col bg-discord-base text-discord-text">
