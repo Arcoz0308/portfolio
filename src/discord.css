@@ -1,0 +1,46 @@
+.portfolio-discord {
+  --focus-color: var(--color-discord-accent);
+  color-scheme: dark;
+}
+
+.portfolio-discord .arcscord-discord-ui {
+  font-family: var(--font-sans);
+}
+
+.portfolio-discord .dui-channel {
+  min-height: 0;
+}
+
+.portfolio-discord .dui-message-list {
+  max-width: 48rem;
+  padding-block: 0.5rem 1rem;
+}
+
+.portfolio-discord .dui-message {
+  padding: 1rem 1.25rem;
+}
+
+.portfolio-discord .dui-embed {
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+}
+
+.portfolio-discord .dui-embed-title {
+  margin-bottom: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.portfolio-discord .dui-embed a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.portfolio-discord .dui-embed a:focus-visible {
+  outline-offset: 1px;
+}
+
+@media (min-width: 48rem) {
+  .portfolio-discord .dui-message {
+    padding-inline: 1.75rem;
+  }
+}

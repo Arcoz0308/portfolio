@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --color-paper: #faf9fd;
+  --color-ink: #201b2c;
+  --color-muted: #5e566a;
+  --color-line: #e3ddeb;
+  --color-accent: #6d28d9;
+  --color-accent-strong: #571db9;
+  --color-lilac: #efe8fc;
+  --color-discord-base: #262631;
+  --color-discord-rail: #20202a;
+  --color-discord-line: #3c3a48;
+  --color-discord-text: #f4f2fa;
+  --color-discord-muted: #c3becf;
+  --color-discord-accent: #a78bfa;
+}
+
+@layer base {
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-color, var(--color-accent));
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  .site-shell {
+    @apply mx-auto w-full max-w-[68rem] px-6 sm:px-9;
+  }
+
+  .text-link {
+    @apply inline-flex min-h-9 items-center gap-1.5 font-medium text-accent motion-safe:transition-colors hover:text-accent-strong hover:underline hover:underline-offset-4;
+  }
+}
