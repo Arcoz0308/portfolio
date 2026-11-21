@@ -9,6 +9,7 @@ type Project = {
   iconUrl: string
   category: string
   description: string
+  history?: string
   contribution?: string
   stack: readonly string[]
   links: readonly Link[]
@@ -68,5 +69,15 @@ export const projects: readonly Project[] = [
       { label: 'Site', href: 'https://ui.arcscord.dev' },
       { label: 'GitHub', href: 'https://github.com/arcscord/discord-ui' },
     ],
+  },
+  {
+    id: 'bse-discord-bot',
+    name: 'BSE Discord Bot',
+    iconUrl: '/images/bse.jpg',
+    category: 'Bot Discord',
+    description: 'Le bot Discord de BSE, avec niveaux, classements et annonces d’événements. Utilisé pendant environ deux ans.',
+    history: 'Développé en 2023–2024 · Hors service',
+    stack: ['Node.js', 'TypeScript', 'discord.js', 'Prisma'],
+    links: [{ label: 'GitHub', href: 'https://github.com/BSEsportTeam/Discord-Bot' }],
   },
 ]

@@ -63,6 +63,7 @@ export function Portfolio({ url, shouldFocus }: { url: URL; shouldFocus: boolean
                   </div>
                   <h3 className="mt-3.5 text-xl leading-tight font-bold tracking-[-0.035em] wrap-anywhere sm:text-[1.35rem]">{project.name}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{project.description}</p>
+                  {project.history && <p className="mt-2 text-xs leading-relaxed font-medium text-muted">{project.history}</p>}
                   {project.contribution && <p className="mt-2 text-sm leading-relaxed text-muted">{project.contribution}</p>}
                   <ul aria-label={`Technologies – ${project.name}`} className="mt-4 mb-2 flex flex-wrap gap-1.5" role="list">
                     {project.stack.map((technology) => (

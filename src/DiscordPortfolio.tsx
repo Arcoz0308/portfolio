@@ -80,7 +80,7 @@ const channels: Record<ChannelId, ChannelViewModel> = {
             {
               id: 'description',
               kind: 'text-display',
-              content: [project.description, project.contribution].filter(Boolean).join('\n\n'),
+              content: [project.description, project.history, project.contribution].filter(Boolean).join('\n\n'),
             },
             { id: 'stack', kind: 'text-display', content: `-# ${project.stack.join(' · ')}` },
             {
