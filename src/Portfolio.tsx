@@ -1,19 +1,21 @@
 import { useEffect } from 'react'
-import { contactPlaceholder, displayName, profile, projects } from './content'
+import { contactPlaceholder, contributions, displayName, profile, projects } from './content'
 import { Icon } from './Icons'
 import { discordHref } from './navigation'
+import { contributionStatsText, contributionStatsTitle, useContributionStats } from './contributionStats'
 
-export function Portfolio({ url, shouldFocus }: { url: URL; shouldFocus: boolean }) {
+export function Portfolio({ url, navigationId }: { url: URL; navigationId: number }) {
+  const contributionStats = useContributionStats()
   useEffect(() => {
     const { hash } = url
-    const sectionId = hash === '#projets' || hash === '#contact' ? hash.slice(1) : undefined
-    if (!sectionId && !shouldFocus) return
+    const sectionId = ['#projets', '#contributions', '#contact'].includes(hash) ? hash.slice(1) : undefined
+    if (!sectionId && navigationId === 0) return
 
     const heading = document.getElementById(sectionId ?? 'accueil')
     heading?.focus({ preventScroll: true })
     if (sectionId) heading?.scrollIntoView({ block: 'start' })
     else window.scrollTo({ top: 0 })
-  }, [url, shouldFocus])
+  }, [url, navigationId])
 
   const contactLinks = profile.email
     ? [{ label: profile.email, href: `mailto:${profile.email}` }, ...profile.profiles]
@@ -26,13 +28,14 @@ export function Portfolio({ url, shouldFocus }: { url: URL; shouldFocus: boolean
           <a href="/" data-route className="py-2 text-xl font-semibold tracking-tight wrap-anywhere hover:text-accent">{displayName}</a>
           <nav aria-label="Navigation principale" className="flex flex-wrap items-center gap-x-5 gap-y-0.5 text-sm sm:gap-x-7">
             <a href="/#projets" data-route className="text-link">Projets</a>
+            <a href="/#contributions" data-route className="text-link">Contributions</a>
             <a href="/#contact" data-route className="text-link">Contact</a>
             <a href={discordHref()} data-route className="text-link">Mode Discord</a>
           </nav>
         </div>
       </header>
 
-      <main className="site-shell">
+      <main id="contenu" tabIndex={-1} className="site-shell focus-visible:outline-offset-[-4px]">
         <section aria-labelledby="accueil" className="pt-14 pb-15 sm:pt-18 sm:pb-16">
           <div className="flex items-center gap-4 sm:gap-6">
             <img src={profile.avatarUrl} alt="" width="80" height="80" className="size-15 shrink-0 rounded-full object-cover ring-1 ring-line sm:size-20" />
@@ -85,6 +88,39 @@ export function Portfolio({ url, shouldFocus }: { url: URL; shouldFocus: boolean
                     </div>
                   )}
                 </article>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section aria-labelledby="contributions" className="mt-14 sm:mt-18">
+          <h2 id="contributions" tabIndex={-1} className="w-fit scroll-mt-6 text-[2rem] leading-tight font-bold tracking-[-0.045em] sm:text-4xl">Contributions</h2>
+          <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted">Des fonctionnalités et des améliorations apportées aux projets d’autres développeurs.</p>
+          <ol className="mt-6 list-none divide-y divide-line border-y border-line" role="list">
+            {contributions.map((contribution) => (
+              <li key={contribution.id} className="grid gap-3 py-6 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8 sm:py-8">
+                <div>
+                  <h3 className="text-xl font-bold tracking-tight">{contribution.name}</h3>
+                  <p className="mt-1 text-sm text-muted">{contribution.period}</p>
+                  <p className="mt-2 text-xs leading-relaxed font-medium text-accent" title={contributionStatsTitle(contributionStats[contribution.id], contribution.repositories)}>
+                    {contributionStatsText(contributionStats[contribution.id])}
+                  </p>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm leading-relaxed text-muted">{contribution.description}</p>
+                  <ul aria-label={`Technologies – ${contribution.name}`} className="mt-4 flex flex-wrap gap-1.5" role="list">
+                    {contribution.stack.map((technology) => (
+                      <li key={technology} className="rounded-md bg-lilac px-2 py-1 text-xs font-medium text-accent">{technology}</li>
+                    ))}
+                  </ul>
+                  <div className="mt-2 flex flex-wrap gap-x-5 text-sm">
+                    {contribution.links.map((link) => (
+                      <a key={link.href} href={link.href} className="text-link" aria-label={`${link.label} – ${contribution.name}`}>
+                        {link.label} <Icon name="external" className="size-3.5" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </li>
             ))}
           </ol>

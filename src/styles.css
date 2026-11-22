@@ -32,7 +32,15 @@
   }
 }
 
+:root:not([data-keyboard-navigation]) :focus {
+  outline: none;
+}
+
 @layer components {
+  .skip-link {
+    @apply fixed top-3 left-3 z-50 -translate-y-[200%] rounded-lg bg-accent px-4 py-3 text-sm font-semibold text-white focus-visible:translate-y-0;
+  }
+
   .site-shell {
     @apply mx-auto w-full max-w-[68rem] px-6 sm:px-9;
   }

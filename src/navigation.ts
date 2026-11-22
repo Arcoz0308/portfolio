@@ -1,4 +1,4 @@
-export const channelIds = ['bienvenue', 'projets', 'contact'] as const
+export const channelIds = ['bienvenue', 'projets', 'contributions', 'contact'] as const
 export type ChannelId = (typeof channelIds)[number]
 
 export function discordHref(channel: ChannelId = 'bienvenue') {

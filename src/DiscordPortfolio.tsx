@@ -1,10 +1,12 @@
 import { ChannelView, DiscordUI } from '@arcscord/discord-ui'
 import type { ChannelViewModel, MessageAuthor, MessageView } from '@arcscord/discord-ui'
 import { useEffect, useRef, useState } from 'react'
-import { contactPlaceholder, displayName, profile, projects } from './content'
+import type { KeyboardEvent } from 'react'
+import { contactPlaceholder, contributions, displayName, profile, projects } from './content'
 import { Icon } from './Icons'
 import { channelIds, discordHref } from './navigation'
 import type { ChannelId } from './navigation'
+import { contributionStatsText, contributionStatsTitle, useContributionStats } from './contributionStats'
 import '@arcscord/discord-ui/styles.css'
 import './discord.css'
 
@@ -99,6 +101,24 @@ const channels: Record<ChannelId, ChannelViewModel> = {
       },
     })),
   },
+  contributions: {
+    id: 'contributions',
+    name: 'contributions',
+    messages: contributions.map((contribution): MessageView => ({
+      id: contribution.id,
+      author,
+      timestamp: demoTimestamp,
+      body: {
+        kind: 'markdown',
+        content: [
+          `### ${contribution.name} · ${contribution.period}`,
+          contribution.description,
+          `-# ${contribution.stack.join(' · ')}`,
+          contribution.links.map(markdownLink).join(' · '),
+        ].join('\n\n'),
+      },
+    })),
+  },
   contact: {
     id: 'contact',
     name: 'contact',
@@ -121,10 +141,35 @@ const channels: Record<ChannelId, ChannelViewModel> = {
 
 function ChannelNavigation({ channelId }: { channelId: ChannelId }) {
   const [expanded, setExpanded] = useState(false)
+  const toggle = useRef<HTMLButtonElement>(null)
+
+  function handleNavigationKey(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.nativeEvent.isComposing) return
+    if (event.key === 'Escape' && expanded) {
+      event.preventDefault()
+      setExpanded(false)
+      toggle.current?.focus()
+      return
+    }
+
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return
+    const links = Array.from(event.currentTarget.querySelectorAll<HTMLAnchorElement>('nav a'))
+    const index = links.indexOf(event.target as HTMLAnchorElement)
+    if (index === -1) return
+
+    event.preventDefault()
+    let nextIndex = index
+    if (event.key === 'ArrowDown') nextIndex = (index + 1) % links.length
+    if (event.key === 'ArrowUp') nextIndex = (index - 1 + links.length) % links.length
+    if (event.key === 'Home') nextIndex = 0
+    if (event.key === 'End') nextIndex = links.length - 1
+    links[nextIndex]?.focus()
+  }
 
   return (
-    <div className="min-w-0 border-b border-discord-line bg-discord-rail md:border-r md:border-b-0 md:px-3 md:pt-6">
+    <div onKeyDown={handleNavigationKey} className="min-w-0 border-b border-discord-line bg-discord-rail md:border-r md:border-b-0 md:px-3 md:pt-6">
       <button
+        ref={toggle}
         type="button"
         aria-controls="salons"
         aria-expanded={expanded}
@@ -155,13 +200,24 @@ function ChannelNavigation({ channelId }: { channelId: ChannelId }) {
   )
 }
 
-export default function DiscordPortfolio({ channelId, shouldFocus }: { channelId: ChannelId; shouldFocus: boolean }) {
+export default function DiscordPortfolio({ channelId, navigationId }: { channelId: ChannelId; navigationId: number }) {
   const heading = useRef<HTMLHeadingElement>(null)
+  const contributionStats = useContributionStats()
+  const channel = channelId === 'contributions' ? {
+    ...channels.contributions,
+    messages: channels.contributions.messages.map((message, index): MessageView => ({
+      ...message,
+      body: {
+        kind: 'markdown',
+        content: `${message.body?.kind === 'markdown' ? message.body.content : ''}\n\n${contributionStatsText(contributionStats[message.id])}\n-# ${contributionStatsTitle(contributionStats[message.id], contributions[index].repositories)}`,
+      },
+    })),
+  } : channels[channelId]
 
   useEffect(() => {
     window.scrollTo({ top: 0 })
-    if (shouldFocus) heading.current?.focus({ preventScroll: true })
-  }, [channelId, shouldFocus])
+    if (navigationId > 0) heading.current?.focus({ preventScroll: true })
+  }, [channelId, navigationId])
 
   return (
     <div className="portfolio-discord flex h-dvh min-h-[26rem] flex-col bg-discord-base text-discord-text">
@@ -174,10 +230,10 @@ export default function DiscordPortfolio({ channelId, shouldFocus }: { channelId
 
       <div className="grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] md:grid-cols-[13.5rem_minmax(0,1fr)] md:grid-rows-1">
         <ChannelNavigation key={channelId} channelId={channelId} />
-        <main className="min-h-0 min-w-0">
+        <main id="contenu" tabIndex={-1} className="min-h-0 min-w-0 focus-visible:outline-offset-[-4px]">
           <DiscordUI theme="dark" tokens={discordTokens} locale="fr-FR" timeZone="Europe/Zurich" labels={labels} allowRemoteMedia={false} className="h-full">
             <ChannelView
-              channel={channels[channelId]}
+              channel={channel}
               composer={false}
               height="100%"
               autoScroll={false}

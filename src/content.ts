@@ -24,6 +24,43 @@ type Profile = {
   profiles: readonly Link[]
 }
 
+type Contribution = {
+  id: string
+  name: string
+  repositories: readonly string[]
+  period: string
+  description: string
+  stack: readonly string[]
+  links: readonly Link[]
+}
+
+export const contributions: readonly Contribution[] = [
+  {
+    id: 'kotbo',
+    name: 'Kotbo',
+    repositories: ['Kotbo-Bot/Kotbo', 'Kotbo-Bot/Landing-Page'],
+    period: '2026',
+    description: 'Restructuration ciblée de certaines fonctionnalités du bot, corrections mineures et amélioration des aperçus Discord sur le site.',
+    stack: ['TypeScript', 'Prisma', 'Svelte'],
+    links: [
+      { label: 'Mes PR sur le bot', href: 'https://github.com/Kotbo-Bot/Kotbo/pulls?q=is%3Apr+author%3AArcoz0308' },
+      { label: 'PR de la landing page', href: 'https://github.com/Kotbo-Bot/Landing-Page/pull/14' },
+    ],
+  },
+  {
+    id: 'codelynx',
+    name: 'Codelynx',
+    repositories: ['Melvynx/codelynx-formation-discord-bot'],
+    period: '2024',
+    description: 'Développement de fonctionnalités pour le bot Codelynx de la communauté de Melvynx. Recherche de contenus X et YouTube, vérification des membres et outils communautaires.',
+    stack: ['TypeScript', 'Prisma', 'OpenAI'],
+    links: [
+      { label: 'Mes PR', href: 'https://github.com/Melvynx/codelynx-formation-discord-bot/pulls?q=is%3Apr+author%3AArcoz0308' },
+      { label: 'Thread technique', href: 'https://x.com/Arcozdev/status/1832826247334019248' },
+    ],
+  },
+]
+
 export const profile: Profile = {
   name: 'Arcoz',
   avatarUrl: '/images/arcoz.webp',
