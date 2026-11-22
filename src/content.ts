@@ -52,7 +52,7 @@ export const contributions: readonly Contribution[] = [
     name: 'Codelynx',
     repositories: ['Melvynx/codelynx-formation-discord-bot'],
     period: '2024',
-    description: 'Développement de fonctionnalités pour le bot Codelynx de la communauté de Melvynx. Recherche de contenus X et YouTube, vérification des membres et outils communautaires.',
+    description: 'Développement de fonctionnalités pour le bot Codelynx de la communauté formation de Melvynx. Recherche de contenus X et YouTube, vérification des membres et outils communautaires.',
     stack: ['TypeScript', 'Prisma', 'OpenAI'],
     links: [
       { label: 'Mes PR', href: 'https://github.com/Melvynx/codelynx-formation-discord-bot/pulls?q=is%3Apr+author%3AArcoz0308' },
